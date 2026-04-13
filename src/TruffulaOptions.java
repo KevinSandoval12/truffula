@@ -116,6 +116,10 @@ public class TruffulaOptions  {
     // root handling
     // edge case for if path is not validate
     String path = args[args.length - 1];
+    // helps for missing path
+    if (path.startsWith("-")) {
+      throw new IllegalArgumentException("Path is missing or Unknown Arguments were provided."); 
+    }
     File testRoot = new File(path);
     // edge case if root is not exist/directory
     if (!testRoot.exists() || !testRoot.isDirectory()) {
