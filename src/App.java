@@ -39,11 +39,14 @@ public class App {
    *    → Use color, don't show hidden files.
    * 
    * Error messages will be shown for illegal arguments or a not found file
-   */
-  public static void main(String[] args) throws Exception {
-    // TODO: Implement this
-    // You should create a TruffulaOptions object using the args and
-    // pass it to a new TruffulaPrinter that uses System.out
-    // Then, call printTree on the TruffulaPrinter
+  */
+ public static void main(String[] args) throws Exception {
+   // TODO: Implement this
+   // You should create a TruffulaOptions object using the args and
+   // pass it to a new TruffulaPrinter that uses System.out
+   // Then, call printTree on the TruffulaPrinter
+   TruffulaOptions options = new TruffulaOptions(args);
+   TruffulaPrinter printer = new TruffulaPrinter(options);
+   printer.printTree();
   }
 }
