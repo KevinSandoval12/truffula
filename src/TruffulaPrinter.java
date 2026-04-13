@@ -115,4 +115,5 @@ public class TruffulaPrinter {
     out.println("printTree was called!");
     out.println("My options are: " + options);
   }
+  
 }
