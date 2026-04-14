@@ -1,3 +1,5 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.util.List;
 
@@ -105,6 +107,7 @@ public class TruffulaPrinter {
   public void printTree() {
     // TODO: Implement this!
     // REQUIRED: ONLY use java.io, DO NOT use java.nio
+
     
     // Hints:
     // - Add a recursive helper method
@@ -112,8 +115,39 @@ public class TruffulaPrinter {
     // DO NOT USE SYSTEM.OUT.PRINTLN
     // USE out.println instead (will use your ColorPrinter)
 
-    out.println("printTree was called!");
-    out.println("My options are: " + options);
+    // out.println("printTree was called!");
+    // out.println("My options are: " + options);
+    int level = 0;
+    printTree(options.getRoot(), level);
+  }
+
+  private void printTree(File root, int level) {
+    String indent = "";
+    for (int i = 0; i < level; i++) {
+      indent += "   ";
+    }
+
+    if (root.isDirectory()) {
+      out.println(indent + root.getName() + "/");
+    } else {
+      out.println(indent + root.getName());
+    }
+    
+    if (root.isDirectory()) {
+      File[] rootList = root.listFiles();
+      // .listFiles() can return null sometimes so check
+      // if null just do nothing
+      if (rootList != null){
+        for (File file : rootList) {
+          if (!options.isShowHidden() && file.getName().startsWith(".")) {
+            continue;
+          }
+          printTree(file, level + 1);
+        }
+      }
+
+      
+    }
   }
   
 }

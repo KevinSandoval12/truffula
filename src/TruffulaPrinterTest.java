@@ -149,4 +149,92 @@ public class TruffulaPrinterTest {
         // Assert that the output matches the expected output exactly
         assertEquals(expected.toString(), output);
     }
+
+@Test
+public void testPrintTree_ExactOutput_WithNoColor(@TempDir File tempDir) throws IOException {
+    File myFolder = new File(tempDir, "myFolder");
+    assertTrue(myFolder.mkdir());
+
+    File apple = new File(myFolder, "Apple.txt");
+    File banana = new File(myFolder, "banana.txt");
+    File zebra = new File(myFolder, "zebra.txt");
+    apple.createNewFile();
+    banana.createNewFile();
+    zebra.createNewFile();
+
+    createHiddenFile(myFolder, ".hidden.txt");
+
+    File documents = new File(myFolder, "Documents");
+    assertTrue(documents.mkdir());
+
+    File readme = new File(documents, "README.md");
+    File notes = new File(documents, "notes.txt");
+    readme.createNewFile();
+    notes.createNewFile();
+
+    File images = new File(documents, "images");
+    assertTrue(images.mkdir());
+
+    File cat = new File(images, "cat.png");
+    File dog = new File(images, "Dog.png");
+    cat.createNewFile();
+    dog.createNewFile();
+
+    TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, printStream);
+    printer.printTree();
+
+    String output = baos.toString();
+    String nl = System.lineSeparator();
+
+    StringBuilder expected = new StringBuilder();
+
+    ConsoleColor reset = ConsoleColor.RESET;
+    ConsoleColor white = ConsoleColor.WHITE;
+
+    expected.append(white).append("myFolder/").append(nl).append(reset);
+    expected.append(white).append("   Apple.txt").append(nl).append(reset);
+    expected.append(white).append("   banana.txt").append(nl).append(reset);
+    expected.append(white).append("   Documents/").append(nl).append(reset);
+    expected.append(white).append("      images/").append(nl).append(reset);
+    expected.append(white).append("         cat.png").append(nl).append(reset);
+    expected.append(white).append("         Dog.png").append(nl).append(reset);
+    expected.append(white).append("      notes.txt").append(nl).append(reset);
+    expected.append(white).append("      README.md").append(nl).append(reset);
+    expected.append(white).append("   zebra.txt").append(nl).append(reset);
+
+    assertEquals(expected.toString(), output);
+}
+
+@Test
+public void testNestedDirectories(@TempDir File tempDir) throws IOException {
+    File myFolder = new File(tempDir, "myFolder");
+    assertTrue(myFolder.mkdir());
+
+    File sub = new File(myFolder, "sub");
+    assertTrue(sub.mkdir());
+
+    File deep = new File(sub, "deep.txt");
+    deep.createNewFile();
+
+    TruffulaOptions options = new TruffulaOptions(myFolder, false, false);
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PrintStream ps = new PrintStream(baos);
+
+    TruffulaPrinter printer = new TruffulaPrinter(options, ps);
+    printer.printTree();
+
+    String output = baos.toString();
+
+    // structure checks
+    assertTrue(output.contains("myFolder/"));
+    assertTrue(output.contains("sub/"));
+    assertTrue(output.contains("deep.txt"));
+}
+
 }
