@@ -91,9 +91,6 @@ public class ColorPrinter {
     if (reset) {
       printStream.print(ConsoleColor.RESET);
     } 
-   
-    
-    
   }
 
   /**

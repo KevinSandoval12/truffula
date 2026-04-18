@@ -273,7 +273,7 @@ public void testHiddenFiles_NotShown(@TempDir File tempDir) throws IOException {
 
     File hidden = createHiddenFile(root, ".hidden.txt");
 
-    TruffulaOptions options = new TruffulaOptions(root, false, false); // showHidden = false
+    TruffulaOptions options = new TruffulaOptions(root, false, false);
 
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     PrintStream ps = new PrintStream(baos);

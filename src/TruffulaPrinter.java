@@ -141,7 +141,9 @@ public class TruffulaPrinter {
       // .listFiles() can return null sometimes so check
       // if null just do nothing
       if (rootList != null){
-        for (File file : rootList) {
+        File[] sorted = AlphabeticalFileSorter.sort(rootList);
+
+        for (File file : sorted) {
           if (!options.isShowHidden() && file.isHidden()) {
             continue;
           }
@@ -153,13 +155,12 @@ public class TruffulaPrinter {
     }
   }
 
-  private void printLine(String text, int level) {
-    if (options.isUseColor()) {
-      ConsoleColor color = colorSequence.get(level % colorSequence.size());
-      out.println(color + text + ConsoleColor.RESET);
-    } else {
-      out.println(text);
-    }
-  }
-  
+private void printLine(String text, int level) {
+  ConsoleColor color = options.isUseColor()
+      ? colorSequence.get(level % colorSequence.size())
+      : ConsoleColor.WHITE;
+
+  out.setCurrentColor(color);
+  out.println(text);
+}
 }
