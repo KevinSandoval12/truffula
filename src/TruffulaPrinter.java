@@ -127,11 +127,14 @@ public class TruffulaPrinter {
       indent += "   ";
     }
 
+    String name;
     if (root.isDirectory()) {
-      out.println(indent + root.getName() + "/");
+      name = indent + root.getName() + "/";
     } else {
-      out.println(indent + root.getName());
+      name = indent + root.getName();
     }
+
+    printLine(name, level);
     
     if (root.isDirectory()) {
       File[] rootList = root.listFiles();
@@ -139,7 +142,7 @@ public class TruffulaPrinter {
       // if null just do nothing
       if (rootList != null){
         for (File file : rootList) {
-          if (!options.isShowHidden() && file.getName().startsWith(".")) {
+          if (!options.isShowHidden() && file.isHidden()) {
             continue;
           }
           printTree(file, level + 1);
@@ -147,6 +150,15 @@ public class TruffulaPrinter {
       }
 
       
+    }
+  }
+
+  private void printLine(String text, int level) {
+    if (options.isUseColor()) {
+      ConsoleColor color = colorSequence.get(level % colorSequence.size());
+      out.println(color + text + ConsoleColor.RESET);
+    } else {
+      out.println(text);
     }
   }
   
